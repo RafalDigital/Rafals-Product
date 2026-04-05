@@ -1,5 +1,5 @@
 // IMPORT
-import { RiInstagramLine, RiGithubLine } from '@remixicon/react';
+import { RiInstagramLine, RiGithubLine, RiArrowDownLongLine } from '@remixicon/react';
 
 export default function Hero() {
     return (
@@ -11,6 +11,12 @@ export default function Hero() {
                     <div className="absolute w-full bottom-2 left-8 right-8 flex gap-2.5">
                         <Link logo={RiInstagramLine} size={16}/>
                         <Link logo={RiGithubLine} size={16}/>
+                    </div>
+                    <div className="group absolute flex flex-col items-center cursor-pointer h-max text-white right-10 top-20">
+                        <div className="w-1 h-20 bg-white rounded-xs translate-y-2.5 transition-all ease-in-out duration-300 group-hover:h-40"></div>
+                        <RiArrowDownLongLine size={46} />
+                        <p>Scroll</p>
+                        <p>Down</p>
                     </div>
                 </div>
             </section>
@@ -30,3 +36,4 @@ const Logo = logo;
         </>
     )
 }
+
