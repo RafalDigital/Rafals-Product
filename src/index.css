@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@theme {
+  --color-primary: #1d1e22;
+  --color-secondary: #30302e;
+  --color-option-1: #3C63FF;
+  --color-option-2: #6B00FF;
+  --color-option-3: #1a1a1a;
+  --color-option-4: #0d0d0d;
+  --color-option-5: #434340;
+  --color-option-6: #3c3c3a;
+  --color-option-7: #141413;
+
+  /* font */
+  --font-playfairdisplay: playfairdisplay, sans-serif;
+
+}
+
+@font-face {
+    font-family: playfairdisplay;
+    src: url('../src/assets/font/PlayfairDisplay.ttf') format('truetype');
+    font-weight: 100 900; 
+    font-style: normal;
+    font-display: swap;
+}
+
+/* RESET */
+/* index.css — global */
+
+/* *, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  isolation: isolate; /* biar z-index elemen absolute tidak bocor keluar */
+}
+
+/* Section boleh full-width background */
+section {
+  width: 100%;
+}
+
+/* Container inner — ini yang centered & max-width */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 5vw, 2rem); /* fluid padding, tidak pecah di mobile */
+}
+
+/* Hero — JANGAN h-dvh, pakai ini */
+.hero {
+  min-height: min(100dvh, 900px); /* tidak terus membesar saat zoom out */
+  display: flex;
+  align-items: center;
+}
+
+/* Elemen absolute — posisikan relatif ke section, bukan viewport */
+section {
+  position: relative; /* absolute child tidak kabur ke viewport */
+  overflow: hidden;   /* absolute child tidak bikin scroll horizontal */
+}
+
+/* Footer selalu di bawah meski konten sedikit */
+footer {
+  margin-top: auto;
+}
