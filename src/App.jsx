@@ -1,4 +1,5 @@
 import Content from "./assets/component/content"
+import Footer from "./assets/component/footer"
 import Hero from "./assets/component/hero"
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <>
       <Hero/>
       <Content/>
+      <Footer/>
     </>
   )
 }
