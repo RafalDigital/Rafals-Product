@@ -1,6 +1,7 @@
 // IMPORT
 import { useState } from "react"
 import { RiMore2Fill } from '@remixicon/react';
+import { useEffect } from "react";
 
 const stackColors = {
   HTML: "15 100% 55%",
@@ -13,16 +14,42 @@ const stackColors = {
 
 
 export default function Content() {
+    const [products, setProducts] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true)
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [isClosing, setIsClosing] = useState(false);
+
+    function handleClose() {
+        setIsClosing(true);
+
+        setTimeout(() => {
+            setSelectedProduct(null);
+            setIsClosing(false);
+        }, 300); // harus sama dengan duration animasi
+    }
+
+    useEffect(() => {
+        fetch('/data/products.json')
+            .then(response => response.json())
+            .then(data => {
+                setProducts(data.Products);
+                // setIsLoading(false);
+                console.log(data.Products)
+            });
+    },([]))
+
     return (
         <>
             <section className="relative h-fit pb-10 w-full bg-primary flex items-center justify-center">
                 <div className="relative w-full h-full max-w-7xl flex items-center flex-col">
                     <div className="absolute top-0 w-11/12 h-0.5 bg-option-5"></div>
                     <Menu/>
-                    <ProductsWrapper/>
+                    <ProductsWrapper products={products} setSelectedProduct={setSelectedProduct}/>
                 </div>
             </section>
-            <FullProduct/>
+            {selectedProduct && (
+                <FullProduct products={selectedProduct} close={handleClose} isClosing={isClosing}/>
+            )}
         </>
     )
 }
@@ -86,36 +113,41 @@ function FilterMenu({isOpen}) {
 
 // PRODUCT COMPONENT
 
-function ProductsWrapper() {
+function ProductsWrapper({ products, setSelectedProduct }) {
     return(
         <>
             <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-[75rem] h-fit py-5 mt-2.5">
-                <Products stacks={['JavaScript','HTML','CSS','NodeJS']} title={'Title'} desc={'Deskripsi'} btn={'Coba La Buka'} id={1}/>
+                {products.map((p) => (
+                    <Products key={p.Id} {...p} setSelectedProduct={setSelectedProduct}
+                    // Stacks={[p.Stacks]} Sections={[p.Sections]} Title={p.Title} Desc={p.Desc} Image={p.Image} Button={p.Button}
+                    />
+                ))}
             </div>
         </>
     )
 }
 
-function Products({stacks = [], title, desc, btn, id}) {
+function Products({ Stacks = [], Sections = [], Title, Desc, Id, Image, Button, setSelectedProduct, Price }) {
     return(
         <>
-            <div key={id} className="group bg-secondary border border-option-5 rounded-2xl overflow-hidden w-11/12 px-0.5 pt-3 max-w-xs transition-all hover:shadow-lg">
+            <div className="group bg-secondary border border-option-5 rounded-2xl overflow-hidden w-11/12 px-0.5 pt-3 max-w-xs transition-all hover:shadow-lg">
                 <div className="aspect-[4/3] overflow-hidden w-11/12 mx-auto border border-option-5 rounded-md">
-                    <img src="" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 border-none rounded-md"/>
+                    <img src={Image} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 border-none rounded-md"/>
                 </div>
                 <div className="p-4 flex flex-col gap-2">
-                    <h1 className="text-white font-semibold text-lg">{title}</h1>
-                    <p className="text-white text-sm line-clamp-2">{desc}</p>
+                    <h1 className="text-white font-semibold text-lg">{Title}</h1>
+                    <p className="text-white text-sm line-clamp-2">{Desc}</p>
                     <div className="w-full flex gap-1">
-                        {stacks.slice(0, 3).map((stack, index) => (
-                            <Stack stack={stack} index={index}/>
+                        {Stacks.slice(0, 3).map((stack, index) => (
+                            <Stack stack={stack} key={index}/>
                         ))}
-                        {stacks.length > 3 && (
-                            <span className="text-white text-sm">+{stacks.length - 3}</span>
+                        {Stacks.length > 3 && (
+                            <span className="text-white text-sm">+{Stacks.length - 3}</span>
                         )}
                     </div>
+                    <p className="text-xl my-0 text-option-1 font-medium"><span>$</span>{Price}</p>
 
-                    <button className="mt-2 bg-primary rounded-lg py-1.5 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">{btn}</button>
+                    <button onClick={() => setSelectedProduct({Stacks, Sections, Title, Desc, Id, Image, Button, Price})} className="mt-1 bg-primary rounded-lg py-1.5 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">{Button}</button>
                 </div>
             </div>
         </>
@@ -156,17 +188,22 @@ function Section({index, section = []}) {
 }
 
 // FULL INFO PRODUCT COMPONENT
-function FullProduct({ stacks = ['JavaScript', 'HTML', 'CSS','React','Tailwind','NodeJS'], sections =['Navbar','Hero','About','Products','Contact','footer']}) {
+function FullProduct({ products, close, isClosing }) {
+    const [show, setShow] = useState(false);
+
+    useEffect(() => {
+        setShow(true);
+    }, []);
+
     return(
         <>
-            <div className="hidden w-full h-dvh bg-black/50 z-20 flex justify-center items-center">
-                <div className="overflow-hidden relative h-[80dvh] max-h-[500px] w-5xl py-5 px-5 bg-secondary rounded-xl border border-option-5 flex gap-10">
-
+            <div onClick={close} key={products.Id} className={`fixed w-full h-dvh bg-black/50 z-20 flex justify-center items-center ${show ? "opacity-100" : "opacity-0"} transition-all duration-300 ease-in-out  ${isClosing? "opacity-0" : "opacity-100"}`}>
+                <div onClick={(e) => e.stopPropagation()} className={`overflow-hidden relative h-[80dvh] max-h-[500px] w-5xl py-5 px-5 bg-secondary rounded-xl border border-option-5 flex gap-10 ${show ? "scale-100" : "scale-90 blur-xl"} transition-all duration-300 ease-in-out ${isClosing? "opacity-0 scale-75 blur-xl": "opacity-100 scale-100"}`}>
                     <div className="w-full h-full">
                         <div className="group w-full h-10/12 overflow-hidden border border-option-5 rounded-lg">
-                            <img src="" alt="" className="w-full h-full group-hover:scale-105"/>
+                            <img src={products.Image} className="w-full h-full group-hover:scale-105"/>
                         </div>
-                            <h1 className="text-white font-semibold text-3xl mt-5 ml-2 font-playfairdisplay">Simple Minimalist - 1</h1>
+                            <h1 className="text-white font-semibold text-3xl mt-5 ml-2 font-playfairdisplay">{products.Title}</h1>
                         
                     </div>
 
@@ -177,34 +214,34 @@ function FullProduct({ stacks = ['JavaScript', 'HTML', 'CSS','React','Tailwind',
 
                             <div className="h-fit pb-2.5 max-h-3/4">
                                 <p className="text-white text-base font-medium mb-2">Desc</p>
-                                <p className="text-white text-sm">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, sunt consequatur! Velit quod dolores suscipit nemo exercitationem reiciendis vitae in vel, maxime quos voluptate commodi! Reprehenderit possimus ipsam sapiente reiciendis. </p>
+                                <p className="text-white text-sm">{products.Desc}</p>
                                 <div className="h-0.5 w-full rounded-2xl bg-option-5 mt-2.5"></div>
                             </div>
 
                             <div className="pb-2.5">
-                                <p className="text-white text-base font-medium mb-2">Stack</p>
+                                <p className="text-white text-base font-medium mb-2">Stacks</p>
                                 <div className="w-full flex gap-1">
-                                    {stacks.map((stack, index) => (
-                                    <Stack stack={stack} index={index}/>
+                                    {products.Stacks.map((stack, index) => (
+                                    <Stack stack={stack} key={index}/>
                                     ))}
                                 </div>
                                 <div className="h-0.5 w-full rounded-2xl bg-option-5 mt-2.5"></div>
                             </div>
 
                             <div>
-                                <p className="text-white text-base font-medium mb-2">Section</p>
+                                <p className="text-white text-base font-medium mb-2">Features</p>
                                 <div className="w-full flex gap-1">
-                                    {sections.map((section, index) => (
-                                    <Section index={index} section={section}/>
+                                    {products.Sections.map((section, index) => (
+                                    <Section key={index} section={section}/>
                                     ))}
                                 </div>
                                 <div className="h-0.5 w-full rounded-2xl bg-option-5 mt-2.5"></div>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2 w-full">
-                            <p className="text-xl text-option-1 font-medium"><span>$</span>5000</p>
-                            <button className="mt-1 bg-primary rounded-lg py-1.5 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">Visit Preview</button>
-                            <button className="mt-1 bg-option-1 rounded-lg py-1.5 text-white border-option-1 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">Buy</button>
+                            <p className="text-xl text-option-1 font-medium"><span>$</span>{products.Price}</p>
+                            <a href={products.LinkSite} className="text-center mt-1 bg-primary rounded-lg py-1.5 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">Visit Preview</a>
+                            <a href={products.PurchaseLink} className="text-center mt-1 bg-option-1 rounded-lg py-1.5 text-white border-option-1 border hover:bg-option-6 active:scale-95 transition-all cursor-pointer">Buy</a>
                         </div>
                     </div>
 

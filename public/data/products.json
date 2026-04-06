@@ -1,0 +1,16 @@
+{
+    "Products" : [
+        {
+            "Id":1,
+            "Title": "Minimalist Notes App",
+            "Image": "path-to/img",
+            "Desc":"Hanya sebuah aplikasi catatan sederhana dengan desain minimalis yang rapih, enak di lihat dan pastinya modern banget deh",
+            "Stacks":["JavaScript", "HTML", "CSS"],
+            "Sections":["Navbar", "Hero", "About", "Footer", "CRUD"],
+            "Button":"Liat Aja Dulu", 
+            "Price": 10,
+            "PurchaseLink":"https",
+            "LinkSite":"https"
+        }
+    ]
+}
