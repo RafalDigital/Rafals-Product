@@ -9,8 +9,8 @@ export default function Hero() {
                     <h1 className="text-white text-5xl font-playfairdisplay font-bold select-none hover:scale-110 active:blur-xs hover:tracking-widest transition-all ease-in-out duration-300">RAFAL'S PRODUCTS</h1>
                     <p className="text-white select-none hover:scale-110 hover:tracking-widest active:blur-xs transition-all ease-in-out duration-300">Web Templates and More</p>
                     <div className="absolute w-full bottom-2 left-8 right-8 flex gap-2.5">
-                        <Link logo={RiInstagramLine} size={16}/>
-                        <Link logo={RiGithubLine} size={16}/>
+                        <Link logo={RiInstagramLine} size={16} href={'https://www.instagram.com/rafaldigital/'}/>
+                        <Link logo={RiGithubLine} size={16} href={'https://github.com/RafalDigital'}/>
                     </div>
                     <div className="group absolute flex flex-col items-center cursor-pointer h-max text-white right-10 top-10">
                         <div className="w-1 h-20 bg-white rounded-xs translate-y-2.5 transition-all ease-in-out duration-300 group-hover:h-60"></div>
@@ -30,12 +30,12 @@ export default function Hero() {
     )
 }
 
-function Link({size, logo}) {
+function Link({size, logo, href}) {
 const Logo = logo;
 
     return (
         <>
-        <a href="#" className="group relative flex items-center justify-center bg-primary rounded-lg w-8 h-8 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all">
+        <a href={href} target="_blank" rel="noopener noreferrer" className="group relative flex items-center justify-center bg-primary rounded-lg w-8 h-8 text-white border-option-5 border hover:bg-option-6 active:scale-95 transition-all">
         <span className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-option-5 rounded-full opacity-0 translate-y-0 transition-all duration-300 group-hover:opacity-100 group-hover:-translate-y-3"></span>
         <Logo size={size} />
         </a>

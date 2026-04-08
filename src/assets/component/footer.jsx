@@ -25,8 +25,8 @@ export default function Footer() {
                         <h2 className="text-white font-semibold mb-2">Products</h2>
                         <ul className="text-white text-sm space-y-1">
                             <li>Templates</li>
-                            <li>UI Kits</li>
-                            <li>Freebies</li>
+                            {/* <li>UI Kits</li>
+                            <li>Freebies</li> */}
                         </ul>
                     </div>
 
@@ -34,9 +34,9 @@ export default function Footer() {
                     <div>
                         <h2 className="text-white font-semibold mb-2">Support</h2>
                         <ul className="text-white text-sm space-y-1">
-                            <li>Contact</li>
-                            <li>FAQ</li>
-                            <li>Privacy</li>
+                            <li><a href="mailto:rafaldigitall@gmail.com" target="_blank" rel="noopener noreferrer">Contact</a></li>
+                            {/* <li>FAQ</li>
+                            <li>Privacy</li> */}
                         </ul>
                     </div>
 
